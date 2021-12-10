@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory
+        android:title="Screen saver"
+        android:key="screensaver">
+
+        <Preference
+            app:key="helpScreensaverPreferences"
+            app:title="Help me with these settings!"/>
+
+        <Preference
+            app:key="launchScreenSettings"
+            app:title="Turn screensaver on/off"
+            android:summary="Open Settings -> Display -> Screen saver"/>
+
+        <Preference
+            app:key="screensaverPreview"
+            app:title="Preview screensaver" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Customization"
+        android:key="customization">
+
+        <Preference
+            app:key="helpCustomizationPreferences"
+            app:title="Help me with these settings!"/>
+
+        <com.rarepebble.colorpicker.ColorPreference
+            android:key="rainingCodeColorPreference"
+            android:title="Raining code color"
+            android:defaultValue="#00FF00"
+            />
+
+        <ListPreference
+            android:title="Raining code density"
+            android:key="numOfColumnsListPreference"
+            android:summary="Number of columns of raining code (default: 25)"
+            android:entries="@array/numberOfColumnsEntries"
+            android:entryValues="@array/numberOfColumnsValues"
+            android:defaultValue="25"/>
+
+        <ListPreference
+            android:title="Raining code speed"
+            android:key="rainSpeedListPreference"
+            android:summary="Vertical speed of raining code (default: 50)"
+            android:entries="@array/rainSpeedEntries"
+            android:entryValues="@array/rainSpeedValues"
+            android:defaultValue="50"/>
+
+        <SwitchPreference
+            android:key="isMyMessageCustomization"
+            android:title="Unlock 'My Message' customization"
+            android:switchTextOff="off"
+            android:switchTextOn="on"
+            android:defaultValue="false"/>
+
+        <EditTextPreference
+            android:key="myMessageEditTextPreference"
+            android:title="My message in the raining code"
+            app:useSimpleSummaryProvider="true"
+            android:inputType="textNoSuggestions"
+            app:dialogTitle="Enter your secret message which will appear randomly in the raining Matrix code"
+            android:defaultValue="Bismuth Blockchain"/>
+
+        <SwitchPreference
+            android:key="isHighlightMyMessage"
+            android:title="Highlight my message"
+            android:summary="Words will appear in a different colour"
+            android:switchTextOff="off"
+            android:switchTextOn="on"
+            android:defaultValue="true"/>
+
+        <SwitchPreference
+            android:key="isBackgroundImage"
+            android:title="Use custom background image"
+            android:summary="Enable/disable background image"
+            android:switchTextOff="off"
+            android:switchTextOn="on"
+            android:defaultValue="false"/>
+
+        <Preference
+            app:key="selectBackgroundImage"
+            app:title="Select background image"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="About"
+        android:key="about">
+
+        <Preference
+            android:key="appVersion"
+            android:title = "Version"/>
+
+        <Preference
+            android:key="appSourceCodeLink"
+            android:title="Source code"
+            android:summary="https://github.com/DoNutsLise/MatrixBismuthScreensaver"/>
+
+        <Preference
+            android:key="appLicence"
+            android:title="Licence"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

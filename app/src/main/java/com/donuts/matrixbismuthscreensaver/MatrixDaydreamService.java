@@ -1,5 +1,6 @@
 package com.donuts.matrixbismuthscreensaver;
 
+import android.content.Intent;
 import android.service.dreams.DreamService;
 import android.util.Log;
 

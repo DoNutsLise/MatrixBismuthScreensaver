@@ -9,9 +9,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MatrixBismuthScreensaver">
-        <!-- uncomment this block for debugging
+
         <activity
-            android:name=".MainActivity"
+            android:name=".SettingsActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -19,7 +19,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        -->
+
+        <activity
+            android:name=".PreviewScreensaverActivity"
+            android:label="ScreensaverPreview">
+        </activity>
 
         <service
             android:name=".MatrixDaydreamService"
@@ -30,6 +34,11 @@
                 <action android:name="android.service.dreams.DreamService" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+
+            <!-- Point to additional information for this dream (optional) -->
+            <meta-data
+                android:name="android.service.dream"
+                android:resource="@xml/dream_settings" />
         </service>
     </application>
 

@@ -9,6 +9,9 @@ There is a secret message (dedicated to the Bismuth blockchain) hidden in the co
 To enable the screensaver navigate to Settings -> Display -> Screensaver / Daydream and choose "Matrix Bismuth Screensaver".
 The Matrix rain will start when you connect your phone to  a chareger (or dock it) and the screen times out.
 
+<p align="center">
+    <img src="https://user-images.githubusercontent.com/49869348/141010275-d600e75d-63c7-42b0-90a3-4312bee6062c.png" width="250" alt="accessibility text">
+</p>
 
 ## HOW TO INSTALL:
 

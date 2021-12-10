@@ -1,4 +1,49 @@
 <resources>
     <string name="app_name">Matrix Bismuth Screensaver</string>
-    <string name="my_daydream_name">Bismuth Matrix Daydream</string>
+    <string name="my_daydream_name">Bismuth Matrix Screensaver</string>
+
+    <!-- License -->
+    <string name="app_license">
+       MIT License
+
+Copyright (c) 2021 DoNutsLise
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+    </string>
+
+    <!-- help with settings -->
+    <string name="helpCustomizationPreferencesString">
+        1. Raining Code color:
+            Choose the color of characters of the raining code.
+        2. Raining code density:
+            Number of columns of the raining code on the screen. the higher the number the more dense the raining code will appear. The default number is 25.
+        3. Raining code speed:
+            This parameter defines the speed of characters in the column (how fast the raining code falls). Default value is 50.
+        4. Unlock "My Message" customization:
+            This will allow you to define your own message. The words from your message will randomly appear in the raining code. You will have to complete a challenge to unlock this option.
+        5. My Message in the raining code:
+            Here you can define your own message. The words from your message will randomly appear in the raining code.
+        6. Highlight my message:
+            If enabled, the words from your message will be highlighted in the raining code with blue and purple colors.
+        7. Use custom background image:
+            You can choose an image stored on your phone as a background for raining code. Default background is black.
+        8. Select background image:
+            Click this preference to launch an image selection wizard.
+    </string>
 </resources>

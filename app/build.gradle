@@ -2,16 +2,16 @@ plugins {
     id 'com.android.application'
 }
 def versionMajor = 0
-def versionMinor = 0
-def versionPatch = 3
+def versionMinor = 1
+def versionPatch = 0
 
 android {
-    compileSdk 30
+    compileSdk 31
 
     defaultConfig {
         applicationId "com.donuts.matrixbismuthscreensaver"
         minSdk 24
-        targetSdk 30
+        targetSdk 31
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
         versionName "${versionMajor}.${versionMinor}.${versionPatch}"
 
@@ -32,9 +32,13 @@ android {
 
 dependencies {
 
-    implementation 'androidx.appcompat:appcompat:1.3.1'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
     testImplementation 'junit:junit:4.+'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    implementation 'androidx.preference:preference:1.1.1'
+
+    // custom color picker library: https://github.com/martin-stone/hsv-alpha-color-picker-android
+    implementation 'com.github.martin-stone:hsv-alpha-color-picker-android:3.0.1'
 }
