@@ -24,6 +24,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
+import androidx.preference.Preference;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -35,12 +36,15 @@ public class MatrixEffectView extends View {
 
     private static final Random RANDOM = new Random();
     private static final List<int[]> CHAR_RANGE_LIST = new ArrayList<>(Arrays.asList(new int[] {48,90}, new int[] {12449,12650})); // Ranges in unicode characters for random character generation
+    int rangeToSelectRandomCharFrom; // a range (one of two from CHAR_RANGE_LIST) from which we generate a random char (basically katakana or latin character is going to be next)
+    int randomIntFromRange; // id of the randomly generated character in the range
     private List<MatrixColumnModel> matrixColumnModelList;
     private int screenWidth, screenHeight;
     private Canvas canvas;
     private Bitmap bitmap;
     private int rainSpeed; // is entered by a user from 10 to 100; but we later convert it to screen refresh frequency as 40000/rainSpeed to bring it close to empirically found 80ms corresponding to input of speed of 50.
     private int rainColor; // integer returned by the color picker preference
+    private int backgroundTransparency;
     private int myMessageHighlightColorBisBlue;
     private int myMessageHighlightColorBisPurple;
     private boolean isHighlightMyMessage; // the words from My Message with be highlighted in Bismuth colors (randomly; either Bismuth pink or Bismuth blue)
@@ -81,6 +85,7 @@ public class MatrixEffectView extends View {
         myMessageHighlightColorBisPurple = ContextCompat.getColor(getContext(), R.color.Bismuth_Purple);
 
         isBackgroundImage = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("isBackgroundImage", false);
+        backgroundTransparency = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("backgroundTransparencyListPreference", "20"));
 
         // create bitmap for background from user's image
         pathToBackgroundImage = PreferenceManager.getDefaultSharedPreferences(getContext()).getString("backgroundImagePath", "");
@@ -118,7 +123,7 @@ public class MatrixEffectView extends View {
 
         customImageBitmapBackground = new Paint();
         customImageBitmapBackground.setColor(Color.BLACK);
-        customImageBitmapBackground.setAlpha(200);
+        customImageBitmapBackground.setAlpha(255 - 255/100*backgroundTransparency);
         customImageBitmapBackground.setStyle(Paint.Style.FILL);
     }
 
@@ -258,7 +263,7 @@ public class MatrixEffectView extends View {
         // initialHeightLimit is the initial position of the column on the screen (typically top of the screen; exception is the start of the application - then random position).
 
         int columnTextLength = RANDOM.nextInt(screenHeight / columnWidth / 3 * 2 - screenHeight / columnWidth / 4) + screenHeight / columnWidth / 4; // random length.
-        int font = RANDOM.nextInt(columnWidth - columnWidth /2)+ columnWidth /2; // random font size
+        int font = RANDOM.nextInt(columnWidth - columnWidth /2)+ columnWidth /2; // random font size from half to full column width
 
         MatrixColumnModel matrixColumnModel = new MatrixColumnModel();
         matrixColumnModel.textFontSize = font;
@@ -292,9 +297,8 @@ public class MatrixEffectView extends View {
         // randomly choose which word from MY_Message to insert in this column
         int indexOfWordToInsert = RANDOM.nextInt(myMessageWordsList.size());
 
-        // convert the chosen word to List<Character> for insertion into list of characters; also invert it for readability on the screen.
+        // convert the chosen word to List<Character> for insertion into list of characters.
         List<Character> charsToInsertList = new ArrayList<>();
-        //for (int i = myMessageWordsList.get(indexOfWordToInsert).toCharArray().length - 1; i >= 0; i--) {
         for (int i = 0; i < myMessageWordsList.get(indexOfWordToInsert).toCharArray().length; i++) {
             charsToInsertList.add(myMessageWordsList.get(indexOfWordToInsert).toCharArray()[i]);
         }
@@ -318,11 +322,11 @@ public class MatrixEffectView extends View {
          */
 
         // randomly choose the range of characters from which we will choose our character (Japanese or latin)
-        int rangeToSelectFrom = RANDOM.nextInt(CHAR_RANGE_LIST.size());
+        rangeToSelectRandomCharFrom = RANDOM.nextInt(CHAR_RANGE_LIST.size());
 
         // generate a random character from the chosen range.
-        int randomIntFromRange = (int) (RANDOM.nextDouble() * (CHAR_RANGE_LIST.get(rangeToSelectFrom)[1]
-                - CHAR_RANGE_LIST.get(rangeToSelectFrom)[0] + 1)) + CHAR_RANGE_LIST.get(rangeToSelectFrom)[0];
+        randomIntFromRange = (int) (RANDOM.nextDouble() * (CHAR_RANGE_LIST.get(rangeToSelectRandomCharFrom)[1]
+                - CHAR_RANGE_LIST.get(rangeToSelectRandomCharFrom)[0] + 1)) + CHAR_RANGE_LIST.get(rangeToSelectRandomCharFrom)[0];
 
         return (char) randomIntFromRange;
     }

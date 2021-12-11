@@ -52,6 +52,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
     private Preference myMessageEditTextPreference;
     private Preference isBackgroundImagePreference;
     private Preference selectBackgroundImagePreference;
+    private Preference backgroundTransparencyListPreference;
 
     private Preference appVersionPreferences;
     Preference appSourceCodeLinkPreferences;
@@ -82,6 +83,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         myMessageEditTextPreference = findPreference("myMessageEditTextPreference");
         isBackgroundImagePreference = findPreference("isBackgroundImage");
         selectBackgroundImagePreference = findPreference("selectBackgroundImage");
+        backgroundTransparencyListPreference = findPreference("backgroundTransparencyListPreference");
 
         appVersionPreferences = findPreference("appVersion");
         appSourceCodeLinkPreferences = (Preference) findPreference("appSourceCodeLink");
@@ -151,8 +153,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         // which allows user to choose his custom image for background.
         if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("isBackgroundImage", false)){
             selectBackgroundImagePreference.setEnabled(true);
+            backgroundTransparencyListPreference.setEnabled(true);
         }else{
             selectBackgroundImagePreference.setEnabled(false);
+            backgroundTransparencyListPreference.setEnabled(false);
         }
 
         Log.d(CurrentTime.getCurrentTime("HH:mm:ss"), "SettingsFragment(onCreatePreferences): inflated");
@@ -246,8 +250,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
                 // which allows user to choose his custom image for background
                 if (PreferenceManager.getDefaultSharedPreferences(getActivity()).getBoolean("isBackgroundImage", false)){
                     selectBackgroundImagePreference.setEnabled(true);
+                    backgroundTransparencyListPreference.setEnabled(true);
                 }else{
                     selectBackgroundImagePreference.setEnabled(false);
+                    backgroundTransparencyListPreference.setEnabled(false);
                 }
                 return true;
             }

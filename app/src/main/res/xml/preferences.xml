@@ -86,6 +86,14 @@
             app:key="selectBackgroundImage"
             app:title="Select background image"/>
 
+        <ListPreference
+            android:title="Background transparency"
+            android:key="backgroundTransparencyListPreference"
+            android:summary="High transparency - clear image (default: 20)"
+            android:entries="@array/backgroundTransparencyEntries"
+            android:entryValues="@array/backgroundTransparencyValues"
+            android:defaultValue="20"/>
+
     </PreferenceCategory>
 
     <PreferenceCategory
