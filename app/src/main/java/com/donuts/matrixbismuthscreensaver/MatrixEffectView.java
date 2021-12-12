@@ -262,7 +262,7 @@ public class MatrixEffectView extends View {
     private MatrixColumnModel initializeNewColumn(int initialHeightLimit) {
         // initialHeightLimit is the initial position of the column on the screen (typically top of the screen; exception is the start of the application - then random position).
 
-        int columnTextLength = RANDOM.nextInt(screenHeight / columnWidth / 3 * 2 - screenHeight / columnWidth / 4) + screenHeight / columnWidth / 4; // random length.
+        int columnTextLength = RANDOM.nextInt(screenHeight / columnWidth /3 * 2 - screenHeight / columnWidth / 4) + screenHeight / columnWidth / 4; // random length.
         int font = RANDOM.nextInt(columnWidth - columnWidth /2)+ columnWidth /2; // random font size from half to full column width
 
         MatrixColumnModel matrixColumnModel = new MatrixColumnModel();

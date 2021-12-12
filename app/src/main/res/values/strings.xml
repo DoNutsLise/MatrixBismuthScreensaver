@@ -45,5 +45,7 @@ SOFTWARE.
             You can choose an image stored on your phone as a background for raining code. Default background is black.
         8. Select background image:
             Click this preference to launch an image selection wizard.
+        9. Background transparency:
+            This parameter defines how clearly the image you chose for the background will be visible. The higher the value of the transparency the more clearly the image will be visible.
     </string>
 </resources>

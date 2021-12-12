@@ -39,9 +39,6 @@ import java.util.Objects;
 
 public class SettingsFragment extends PreferenceFragmentCompat implements SharedPreferences.OnSharedPreferenceChangeListener, InterfaceAlertDialogCallback {
 
-    private boolean isSettingsChanged = false;
-    private PreferenceScreen preferenceScreen;
-    private Map<String, ?> allPreferencesKeys;
     private ActivityResultLauncher<Intent> imageSelectionActivityResultLauncher;
     private Preference helpScreensaverPreferences;
     private Preference launchScreenSettingsPreference;
@@ -49,6 +46,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
     private Preference helpCustomizationPreferences;
     private SwitchPreference isMyMessageCustomization;
+    private SwitchPreference isHighlightMyMessage;
     private Preference myMessageEditTextPreference;
     private Preference isBackgroundImagePreference;
     private Preference selectBackgroundImagePreference;
@@ -65,10 +63,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
         //inflate the views from preferences.xml
         setPreferencesFromResource(R.xml.preferences, rootKey);
-        preferenceScreen = getPreferenceManager().getPreferenceScreen();
-
-        // get a map of all the preferences stored in SharedPreferences
-        allPreferencesKeys = PreferenceManager.getDefaultSharedPreferences(getActivity()).getAll();
 
         /*
          *  find all the preferences
@@ -80,6 +74,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         helpCustomizationPreferences = findPreference("helpCustomizationPreferences");
 
         isMyMessageCustomization = findPreference("isMyMessageCustomization");
+        isHighlightMyMessage = findPreference("isHighlightMyMessage");
         myMessageEditTextPreference = findPreference("myMessageEditTextPreference");
         isBackgroundImagePreference = findPreference("isBackgroundImage");
         selectBackgroundImagePreference = findPreference("selectBackgroundImage");
@@ -145,8 +140,10 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             PreferenceGroup preferenceGroup = findPreference("customization");
             preferenceGroup.removePreference(isMyMessageCustomization);
             myMessageEditTextPreference.setEnabled(true);
+
         }else{
             myMessageEditTextPreference.setEnabled(false);
+            isHighlightMyMessage.setEnabled(false);
         }
 
         // 3. depending on the value of isBackgroundImagePreference we enable/disable selectBackgroundImagePreference
@@ -238,6 +235,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
 
                 }else{
                     myMessageEditTextPreference.setEnabled(false);
+                    isHighlightMyMessage.setEnabled(false);
                 }
                 return true;
             }
@@ -310,8 +308,7 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         // find which preference changed
         Preference preference = findPreference(preferenceKey);
 
-        // regardless of which preference changed we need to set the flag to true - it's being used for triggering data update.
-        isSettingsChanged = true;
+        // logic here
     }
 
     @Override
@@ -321,12 +318,6 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
         //unregister the preference change listener
         getPreferenceScreen().getSharedPreferences()
                 .unregisterOnSharedPreferenceChangeListener(this);
-
-        if (isSettingsChanged) {
-            // TODO: logic here
-
-            isSettingsChanged = false;
-        }
     }
 
     // handle the response of the challenge to unlock My Message customization preference (result comes from CustomizationUnlockChallenge.class which is called when "isMyMessageCustomization" preference is clicked)
@@ -337,15 +328,18 @@ public class SettingsFragment extends PreferenceFragmentCompat implements Shared
             // if the answer is correct
             myAlertDialogMessage.warningMessage("Success", "Correct. Customization preference is unlocked.");
             myMessageEditTextPreference.setEnabled(true);
+            isHighlightMyMessage.setEnabled(true);
         }else if (answer.equals("")){
             // if user cancelled the challenge, we return empty string which is equivalent to failing the challenge
             isMyMessageCustomization.setChecked(false);
             myMessageEditTextPreference.setEnabled(false);
+            isHighlightMyMessage.setEnabled(false);
         }else {
             // if the user answered incorrectly
             myAlertDialogMessage.warningMessage("Incorrect", "Try again");
             isMyMessageCustomization.setChecked(false);
             myMessageEditTextPreference.setEnabled(false);
+            isHighlightMyMessage.setEnabled(false);
         }
     }
 }
