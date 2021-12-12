@@ -7,7 +7,6 @@ Available from Google Play Store: https://play.google.com/store/apps/details?id=
 Video demo is here: https://youtu.be/jDxfuxEHUTk
 
 <p align="center">
-    <img src="https://user-images.githubusercontent.com/49869348/141010275-d600e75d-63c7-42b0-90a3-4312bee6062c.png" width="250" alt="accessibility text">
     <img src="https://user-images.githubusercontent.com/49869348/145716504-ac7f2e15-ccc8-4db1-8439-1f7c40a5fe7e.png" width="250" alt="accessibility text">
     <img src="https://user-images.githubusercontent.com/49869348/145716540-29359d7f-4dec-478e-92e9-2948288c401f.png" width="250" alt="accessibility text">
     <img src="https://user-images.githubusercontent.com/49869348/145716566-ee1dbc66-00c1-4d92-973c-235266772f7a.png" width="250" alt="accessibility text">

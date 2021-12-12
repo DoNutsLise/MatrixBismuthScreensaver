@@ -12,11 +12,15 @@ package com.donuts.matrixbismuthscreensaver;
  */
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
+import android.os.BatteryManager;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -50,6 +54,12 @@ public class MatrixEffectView extends View {
     private boolean isHighlightMyMessage; // the words from My Message with be highlighted in Bismuth colors (randomly; either Bismuth pink or Bismuth blue)
     private boolean isBackgroundImage;
     private boolean isBackgroundImageAcquired;
+    private boolean isBatteryStatus;
+    private boolean isBatteryCharging;
+    private Bitmap batteryChargingBitmap;
+    private IntentFilter intentFilter;
+    private Intent batteryStatus;
+    private int batteryLevel;
     private Bitmap bisLogoBitmap;
     private String myMessage;
     private String pathToBackgroundImage;
@@ -59,7 +69,7 @@ public class MatrixEffectView extends View {
     private int numberOfColumns, columnWidth;
     private Bitmap userImageBitmap;
 
-    private Paint paintText, customImageBitmapBackground, paintBitmapBackground, paintInitialBackground;
+    private Paint paintText, customImageBitmapBackground, paintBitmapBackground, batteryChargingBackground;
 
     public MatrixEffectView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -74,12 +84,12 @@ public class MatrixEffectView extends View {
         myMessageWordsList = Arrays.asList(myMessage.split(" "));
 
         numberOfColumns  =Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("numOfColumnsListPreference", "25"));
-
         rainSpeed  = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("rainSpeedListPreference", "50"));
-
         rainColor = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("rainingCodeColorPreference", 0xff00ff00);
-
+        isBatteryStatus = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("isBatteryStatusSwitchPreference", true);
         isHighlightMyMessage = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("isHighlightMyMessage", true);
+
+        batteryChargingBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_battery_charging);
 
         myMessageHighlightColorBisBlue = ContextCompat.getColor(getContext(), R.color.Bismuth_Blue);
         myMessageHighlightColorBisPurple = ContextCompat.getColor(getContext(), R.color.Bismuth_Purple);
@@ -125,6 +135,10 @@ public class MatrixEffectView extends View {
         customImageBitmapBackground.setColor(Color.BLACK);
         customImageBitmapBackground.setAlpha(255 - 255/100*backgroundTransparency);
         customImageBitmapBackground.setStyle(Paint.Style.FILL);
+
+        batteryChargingBackground = new Paint();
+        batteryChargingBackground.setColor(ContextCompat.getColor(getContext(), R.color.DimGray));
+        batteryChargingBackground.setAlpha(255);
     }
 
     @Override
@@ -142,9 +156,14 @@ public class MatrixEffectView extends View {
         if (isBackgroundImageAcquired){
             userImageBitmap = Bitmap.createScaledBitmap(userImageBitmap,screenWidth,screenHeight,true);
         }
-
         bitmap = Bitmap.createBitmap(screenWidth, screenHeight, Bitmap.Config.ARGB_8888);
         canvas = new Canvas(bitmap);
+
+        // register battery monitoring intent
+        if (isBatteryStatus) {
+            intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
+            batteryStatus = getContext().registerReceiver(null, intentFilter);
+        }
 
         /*
          * initialize matrix columns:
@@ -170,6 +189,13 @@ public class MatrixEffectView extends View {
         canvas.drawBitmap(bitmap, 0, 0, paintBitmapBackground);
         paintCanvas();
 
+        // add battery charge level and icon at the bottom if requested
+        if (isBatteryStatus){
+            batteryLevel = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
+            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MatrixEffect", "onDraw: "+
+                    "battery level: " + batteryLevel);
+        }
+
         // sleep for <PAINT_DELAY_MILLIS> before next canvas draw. Empirically found that 80-100ms is good enough.
         try{
             Thread.sleep(4000/rainSpeed); // 4000/rainspeed was calculated so that values of speed entered by the user (region from 10 to 100) converts roughly to desired range of delays in millis; where speed of 50 converts to 80 millis.
@@ -188,9 +214,18 @@ public class MatrixEffectView extends View {
         }
 
         canvas.drawRect(0, 0, screenWidth, screenHeight, customImageBitmapBackground);
+        //canvas.drawRect(0, screenHeight-100, screenWidth, screenHeight, batteryChargingBackground);
+        //canvas.drawBitmap(batteryChargingBitmap, screenWidth/2, screenHeight-100, batteryChargingBackground);
 
         for(int i = 0; i < matrixColumnModelList.size(); i++) {
             // for each column in the matrix:
+
+            if (isBatteryStatus) {
+                paintText.setColor(rainColor);
+                paintText.setTextSize(columnWidth);
+                paintText.setAlpha(3);
+                canvas.drawText("Battery charge " + batteryLevel + " %", (float) screenWidth/2, screenHeight-2*columnWidth, paintText);
+            }
 
             paintText.setTextSize(matrixColumnModelList.get(i).textFontSize);
 

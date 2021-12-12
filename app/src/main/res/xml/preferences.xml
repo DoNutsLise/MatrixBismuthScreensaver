@@ -52,6 +52,14 @@
             android:defaultValue="50"/>
 
         <SwitchPreference
+            android:key="isBatteryStatusSwitchPreference"
+            android:title="Enable battery status icon"
+            android:summary="Display battery charge at the bottom"
+            android:switchTextOff="off"
+            android:switchTextOn="on"
+            android:defaultValue="true"/>
+
+        <SwitchPreference
             android:key="isMyMessageCustomization"
             android:title="Unlock 'My Message' customization"
             android:switchTextOff="off"
