@@ -55,8 +55,6 @@ public class MatrixEffectView extends View {
     private boolean isBackgroundImage;
     private boolean isBackgroundImageAcquired;
     private boolean isBatteryStatus;
-    private boolean isBatteryCharging;
-    private Bitmap batteryChargingBitmap;
     private IntentFilter intentFilter;
     private Intent batteryStatus;
     private int batteryLevel;
@@ -69,11 +67,10 @@ public class MatrixEffectView extends View {
     private int numberOfColumns, columnWidth;
     private Bitmap userImageBitmap;
 
-    private Paint paintText, customImageBitmapBackground, paintBitmapBackground, batteryChargingBackground;
+    private Paint paintText, customImageBitmapBackground, paintBitmapBackground;
 
     public MatrixEffectView(Context context, AttributeSet attrs) {
         super(context, attrs);
-
     }
     @Override
     protected void onAttachedToWindow() {
@@ -88,8 +85,6 @@ public class MatrixEffectView extends View {
         rainColor = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("rainingCodeColorPreference", 0xff00ff00);
         isBatteryStatus = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("isBatteryStatusSwitchPreference", true);
         isHighlightMyMessage = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("isHighlightMyMessage", true);
-
-        batteryChargingBitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ic_battery_charging);
 
         myMessageHighlightColorBisBlue = ContextCompat.getColor(getContext(), R.color.Bismuth_Blue);
         myMessageHighlightColorBisPurple = ContextCompat.getColor(getContext(), R.color.Bismuth_Purple);
@@ -135,10 +130,6 @@ public class MatrixEffectView extends View {
         customImageBitmapBackground.setColor(Color.BLACK);
         customImageBitmapBackground.setAlpha(255 - 255/100*backgroundTransparency);
         customImageBitmapBackground.setStyle(Paint.Style.FILL);
-
-        batteryChargingBackground = new Paint();
-        batteryChargingBackground.setColor(ContextCompat.getColor(getContext(), R.color.DimGray));
-        batteryChargingBackground.setAlpha(255);
     }
 
     @Override
@@ -214,8 +205,6 @@ public class MatrixEffectView extends View {
         }
 
         canvas.drawRect(0, 0, screenWidth, screenHeight, customImageBitmapBackground);
-        //canvas.drawRect(0, screenHeight-100, screenWidth, screenHeight, batteryChargingBackground);
-        //canvas.drawBitmap(batteryChargingBitmap, screenWidth/2, screenHeight-100, batteryChargingBackground);
 
         for(int i = 0; i < matrixColumnModelList.size(); i++) {
             // for each column in the matrix:
