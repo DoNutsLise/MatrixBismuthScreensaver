@@ -153,7 +153,6 @@ public class MatrixEffectView extends View {
         // register battery monitoring intent
         if (isBatteryStatus) {
             intentFilter = new IntentFilter(Intent.ACTION_BATTERY_CHANGED);
-            batteryStatus = getContext().registerReceiver(null, intentFilter);
         }
 
         /*
@@ -182,9 +181,8 @@ public class MatrixEffectView extends View {
 
         // add battery charge level and icon at the bottom if requested
         if (isBatteryStatus){
+            batteryStatus = getContext().registerReceiver(null, intentFilter);
             batteryLevel = batteryStatus.getIntExtra(BatteryManager.EXTRA_LEVEL, -1);
-            Log.d(CurrentTime.getCurrentTime("HH:mm:ss") + " MatrixEffect", "onDraw: "+
-                    "battery level: " + batteryLevel);
         }
 
         // sleep for <PAINT_DELAY_MILLIS> before next canvas draw. Empirically found that 80-100ms is good enough.
@@ -236,19 +234,18 @@ public class MatrixEffectView extends View {
                 // for each character in the column:
                 paintText.setColor(rainColor);
 
+                if (j==0 & matrixColumnModelList.get(i).charsVertPosIndexList.get(j)  > matrixColumnModelList.get(i).textFinalHeightIndex) {
+                    //  if this is the first character in the column (the one at the top) and it is below the threshold on the screen - we start the new column
+                    matrixColumnModelList.set(i, initializeNewColumn(1)); // new column starts from the top
+                    break;
+                }
+
                 if (j == matrixColumnModelList.get(i).columnCharsList.size() - 1) {
-                    // if this is the last character in the column (the one at the bottom):
-                    if (matrixColumnModelList.get(i).charsVertPosIndexList.get(j)  > matrixColumnModelList.get(i).textFinalHeightIndex){
-                        //  if it is below the limit - generate a new column and start it from random position.
-                        matrixColumnModelList.set(i, initializeNewColumn(1)); // new column starts from the top
-                        break;
-                    }else {
-                        // otherwise, we use the next character from the "pool" of characters.
+                    // if this is the last character in the column (the one at the bottom) - we use the next character from the "pool" of characters.
                         matrixColumnModelList.get(i).columnCharsList.set(j, matrixColumnModelList.get(i).charsPoolList.get(matrixColumnModelList.get(i).counter));
                         matrixColumnModelList.get(i).counter += 1; // next iteration we get the next character from the pool of characters
-
+                        //and make it white
                         paintText.setColor(Color.WHITE);
-                    }
                 } else {
                     // for all other characters assign the value of the one below it in the column.
                     matrixColumnModelList.get(i).columnCharsList.set(j, matrixColumnModelList.get(i).columnCharsList.get(j + 1));
@@ -286,15 +283,15 @@ public class MatrixEffectView extends View {
     private MatrixColumnModel initializeNewColumn(int initialHeightLimit) {
         // initialHeightLimit is the initial position of the column on the screen (typically top of the screen; exception is the start of the application - then random position).
 
-        int columnTextLength = RANDOM.nextInt(screenHeight / columnWidth /3 * 2 - screenHeight / columnWidth / 4) + screenHeight / columnWidth / 4; // random length.
-        int font = RANDOM.nextInt(columnWidth - columnWidth /2)+ columnWidth /2; // random font size from half to full column width
+        int font = RANDOM.nextInt(columnWidth - columnWidth /2 + 1)+ columnWidth / 2; // random font size from half to full column width
+        int columnTextLength = RANDOM.nextInt(screenHeight / font * 8 / 10 - screenHeight / font * 4 / 10 + 1) + screenHeight / font * 4 / 10; // random length. r.nextInt((max - min) + 1) + min
 
         MatrixColumnModel matrixColumnModel = new MatrixColumnModel();
         matrixColumnModel.textFontSize = font;
         matrixColumnModel.columnCharsList = generateRandomText(columnTextLength);
-        matrixColumnModel.charsPoolList = generateRandomText(screenHeight / font + columnTextLength);
+        matrixColumnModel.charsPoolList = generateRandomText(screenHeight / font + columnTextLength+1);
         matrixColumnModel.textInitialHeightIndex = RANDOM.nextInt(initialHeightLimit);
-        matrixColumnModel.textFinalHeightIndex =  RANDOM.nextInt(screenHeight - screenHeight/5*4) + screenHeight/5*4;
+        matrixColumnModel.textFinalHeightIndex =  RANDOM.nextInt(screenHeight * 8 / 10 - screenHeight *5 / 10 +1) + screenHeight * 5 /10;
         matrixColumnModel.textFontStyle = 1;
         matrixColumnModel.textFallingSpeed = 1;
         matrixColumnModel.counter = 0;

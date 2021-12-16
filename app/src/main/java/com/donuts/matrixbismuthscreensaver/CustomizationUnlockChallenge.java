@@ -13,7 +13,6 @@ import android.widget.EditText;
 
 public class CustomizationUnlockChallenge {
     private Context mContext;
-    boolean isChallenge = false;
     private InterfaceAlertDialogCallback listener;
 
     public CustomizationUnlockChallenge(Context context) {
@@ -27,7 +26,7 @@ public class CustomizationUnlockChallenge {
     public void challengeDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(mContext);
         alertDialog.setTitle("Unlock 'My Message' customization.");
-        alertDialog.setMessage("To unlock the preference please answer a simple question: Which programming language Bismuth Platform is based on?\nYou can easily find the answer on Bismuth website (https://bismuth.live");
+        alertDialog.setMessage("To unlock the preference please answer a simple question: Which programming language Bismuth Platform is based on?\nFind the answer on Bismuth website (https://bismuth.live");
 
         // Set up the input EditText widget
         final EditText input = new EditText(mContext);
