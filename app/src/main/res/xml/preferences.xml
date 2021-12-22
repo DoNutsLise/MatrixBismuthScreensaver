@@ -44,6 +44,14 @@
             android:defaultValue="25"/>
 
         <ListPreference
+            android:title="Raining code length"
+            android:key="lengthOfColumnsListPreference"
+            android:summary="Average length of columns of raining code (default: 50)"
+            android:entries="@array/lengthOfColumnsEntries"
+            android:entryValues="@array/lengthOfColumnsValues"
+            android:defaultValue="50"/>
+
+        <ListPreference
             android:title="Raining code speed"
             android:key="rainSpeedListPreference"
             android:summary="Vertical speed of raining code (default: 50)"

@@ -55,8 +55,20 @@
     </string-array>
 
     <!--these arrays are for backgroundTransparencyListPreference preference; high transparency of background results in clearer image-->
-    <string-array name="backgroundTransparencyEntries">
-        <item>0</item>
+    <string-array name="lengthOfColumnsEntries">
+        <item>10 (very short)</item>
+        <item>20</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50 (default)</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+        <item>90</item>
+        <item>100 (very long)</item>
+    </string-array>
+
+    <string-array name="lengthOfColumnsValues">
         <item>10</item>
         <item>20</item>
         <item>30</item>
@@ -67,6 +79,21 @@
         <item>80</item>
         <item>90</item>
         <item>100</item>
+    </string-array>
+
+    <!--these arrays are for lengthOfColumnsListPreference preference; average length of teach column; length is random around this value-->
+    <string-array name="backgroundTransparencyEntries">
+        <item>0 (barely visible)</item>
+        <item>10</item>
+        <item>20 (default)</item>
+        <item>30</item>
+        <item>40</item>
+        <item>50</item>
+        <item>60</item>
+        <item>70</item>
+        <item>80</item>
+        <item>90</item>
+        <item>100 (clearly visible)</item>
     </string-array>
 
     <string-array name="backgroundTransparencyValues">
@@ -82,6 +109,5 @@
         <item>90</item>
         <item>100</item>
     </string-array>
-
 
 </resources>

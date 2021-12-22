@@ -64,14 +64,17 @@ public class MatrixEffectView extends View {
     private List<String> myMessageWordsList;
     private int wordIndexStart; // a word from myMessage starting index in the column (for highlighting)
     private int wordLength; // a word from myMessage length (for highlighting)
-    private int numberOfColumns, columnWidth;
+    private int numberOfColumns, columnWidth, lengthOfColumns;
     private Bitmap userImageBitmap;
+    int maxColumnTextLength, minColumnTextLength, columnTextLength, font;
+    int indexOfWordToInsert;
 
     private Paint paintText, customImageBitmapBackground, paintBitmapBackground;
 
     public MatrixEffectView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
+
     @Override
     protected void onAttachedToWindow() {
         super.onAttachedToWindow();
@@ -81,6 +84,7 @@ public class MatrixEffectView extends View {
         myMessageWordsList = Arrays.asList(myMessage.split(" "));
 
         numberOfColumns  =Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("numOfColumnsListPreference", "25"));
+        lengthOfColumns  =Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("lengthOfColumnsListPreference", "50"));
         rainSpeed  = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(getContext()).getString("rainSpeedListPreference", "50"));
         rainColor = PreferenceManager.getDefaultSharedPreferences(getContext()).getInt("rainingCodeColorPreference", 0xff00ff00);
         isBatteryStatus = PreferenceManager.getDefaultSharedPreferences(getContext()).getBoolean("isBatteryStatusSwitchPreference", true);
@@ -116,7 +120,9 @@ public class MatrixEffectView extends View {
             }
         }
 
-        // some setup for drawing styles
+        /*
+        * some setup for drawing styles
+         */
         paintText = new Paint();
         paintText.setStyle(Paint.Style.FILL);
         paintText.setColor(rainColor);
@@ -283,15 +289,25 @@ public class MatrixEffectView extends View {
     private MatrixColumnModel initializeNewColumn(int initialHeightLimit) {
         // initialHeightLimit is the initial position of the column on the screen (typically top of the screen; exception is the start of the application - then random position).
 
-        int font = RANDOM.nextInt(columnWidth - columnWidth /2 + 1)+ columnWidth / 2; // random font size from half to full column width
-        int columnTextLength = RANDOM.nextInt(screenHeight / font * 8 / 10 - screenHeight / font * 4 / 10 + 1) + screenHeight / font * 4 / 10; // random length. r.nextInt((max - min) + 1) + min
+        font = RANDOM.nextInt(columnWidth - columnWidth /2 + 1)+ columnWidth / 2; // random font size from half to full column width
+
+        /*
+        * the length of each column is random around the value chosen by the user, e.g. value of 50 means the average length is 50% of the maximum amount of characters (i.e. screenHeight/font) +/- 50% of that amount; value of 20 means the average length of the column is 20% of the maximum amount of characters (i.e. screenHeight/font) +/- 50% of 20%.
+        *  random on the range between min and max is defined as: random length. r.nextInt((max - min) + 1) + min.
+        * our min is the value defined by the user minus 50% of the value defined by the user;
+        * our max is the value defined by the user plus 50% of the value defined by the user;
+         */
+        maxColumnTextLength = screenHeight / font * lengthOfColumns / 100 + screenHeight / font * lengthOfColumns / 100 / 2;
+        minColumnTextLength = screenHeight / font * lengthOfColumns / 100 - screenHeight / font * lengthOfColumns / 100 / 2;
+        columnTextLength = RANDOM.nextInt(maxColumnTextLength - minColumnTextLength + 1) + minColumnTextLength;
+        columnTextLength = Math.max(columnTextLength, 2);
 
         MatrixColumnModel matrixColumnModel = new MatrixColumnModel();
         matrixColumnModel.textFontSize = font;
         matrixColumnModel.columnCharsList = generateRandomText(columnTextLength);
         matrixColumnModel.charsPoolList = generateRandomText(screenHeight / font + columnTextLength+1);
         matrixColumnModel.textInitialHeightIndex = RANDOM.nextInt(initialHeightLimit);
-        matrixColumnModel.textFinalHeightIndex =  RANDOM.nextInt(screenHeight * 8 / 10 - screenHeight *5 / 10 +1) + screenHeight * 5 /10;
+        matrixColumnModel.textFinalHeightIndex =  RANDOM.nextInt(screenHeight * 9 / 10 - screenHeight *6 / 10 +1) + screenHeight * 6 /10;
         matrixColumnModel.textFontStyle = 1;
         matrixColumnModel.textFallingSpeed = 1;
         matrixColumnModel.counter = 0;
@@ -316,7 +332,7 @@ public class MatrixEffectView extends View {
 
         // insert words from user's string into the text:
         // randomly choose which word from MY_Message to insert in this column
-        int indexOfWordToInsert = RANDOM.nextInt(myMessageWordsList.size());
+        indexOfWordToInsert = RANDOM.nextInt(myMessageWordsList.size());
 
         // convert the chosen word to List<Character> for insertion into list of characters.
         List<Character> charsToInsertList = new ArrayList<>();
